@@ -1,14 +1,46 @@
 "use client"
 import {useForm} from 'react-hook-form'
+import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter()
+  const [errorMessage, setErrorMessage] = useState()
+
   const {handleSubmit, register, formState: {isValid}} = useForm({mode: 'onChange'})
 
-  function handleSubmitLogin(data) {
-    console.log('ola', data)
+  async function handleSubmitLogin(data) {
+    setErrorMessage(null)
+
+    const response = await fetch(`${process.env.api_url}/auth/login`, {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const responseData = await response.json()
+
+    if (response.ok) {
+      localStorage.setItem('token', responseData.access_token)
+
+      await router.push('/home')
+    }
+
+    setErrorMessage(responseData.message)
+
+    const timeout = setTimeout(() => {
+      setErrorMessage(null)
+      clearTimeout(timeout)
+    }, 4000)
   }
 
   return <form name="login-form" onSubmit={handleSubmit(handleSubmitLogin)}>
+    <div>
+      {errorMessage && <span className="text-red-600">{errorMessage}</span>}
+    </div>
+
     {/* email input */}
     <div className="flex flex-col">
       <label className="pb-2" htmlFor="email">Email</label>
