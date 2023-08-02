@@ -12,7 +12,7 @@ export default function LoginForm() {
   async function handleSubmitLogin(data) {
     setErrorMessage(null)
 
-    const response = await fetch(`${process.env.api_url}/auth/login`, {
+    const response = await fetch(`${process.env.api_url}/auth/sigin`, {
       body: JSON.stringify(data),
       method: 'POST',
       headers: {
@@ -25,7 +25,7 @@ export default function LoginForm() {
     if (response.ok) {
       localStorage.setItem('token', responseData.access_token)
 
-      await router.push('/home')
+      await router.push('/dashboard/home')
     }
 
     setErrorMessage(responseData.message)
