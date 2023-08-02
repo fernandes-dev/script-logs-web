@@ -1,3 +1,5 @@
+"use client"
+
 import {ReactNode} from "react";
 import Image from "next/image";
 import MainImage from "../../../public/metrics.svg";
@@ -19,7 +21,7 @@ export default function Layout({children}: Props) {
 
         <div className="bg-gray-100 w-full">
           <div className="flex h-screen w-full justify-center">
-            <Image width={500} src={MainImage} alt={'metrics image'} />
+            <Image width={500} src={MainImage} alt={'metrics image'}/>
           </div>
         </div>
       </div>
